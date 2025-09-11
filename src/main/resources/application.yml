@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Library Management System
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/LibraryManagementSystem   # change "mydb" to your DB name
+    username: postgres                           # your DB username
+    password: coder                           # your DB password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update                           # update schema automatically (dev only)
+    show-sql: true                               # logs SQL queries
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: always                               # can be never, embedded, always
+      platform: postgres
+
+  security:
+    user:
+      name: admin        # 👈 default username
+      password: admin    # 👈 default password
+      roles: ADMIN       # 👈 default role
+
+logging:
+  level:
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
