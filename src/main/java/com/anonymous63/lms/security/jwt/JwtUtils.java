@@ -19,10 +19,9 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class JwtUtils {
-    private final KeyPair keyPair;
-
     private static final Duration ACCESS_TOKEN_VALIDITY = Duration.ofMinutes(15);
     private static final Duration REFRESH_TOKEN_VALIDITY = Duration.ofDays(7);
+    private final KeyPair keyPair;
 
     // 🔹 Generate Access Token
     public String generateAccessToken(User user) {

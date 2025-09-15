@@ -51,7 +51,7 @@ public class DataInitializer implements CommandLineRunner {
         // 3. Create default admin user if not exist
         if (userRepo.findByEmail("admin@gmail.com").isEmpty()) {
             User admin = new User();
-            admin.setFirstName("admin");
+            admin.setName("admin");
             admin.setEmail("admin@gmail.com");
             admin.setPassword(passwordEncoder.encode("admin")); // change in prod
             admin.setEnabled(true);

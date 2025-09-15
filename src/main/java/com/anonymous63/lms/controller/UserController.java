@@ -23,8 +23,8 @@ public class UserController {
         return new ResponseEntity<>(saveUser, HttpStatus.OK);
     }
 
-    @GetMapping("/")
-    public String home(){
+    @GetMapping("/home")
+    public String home() {
         return "Welcome to Anonymous63 world;";
     }
 }

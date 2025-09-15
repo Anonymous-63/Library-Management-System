@@ -2,7 +2,7 @@ package com.anonymous63.lms.security.oauth;
 
 import java.util.Map;
 
-public class GoogleOAuth2UserInfo implements OAuth2UserInfo{
+public class GoogleOAuth2UserInfo implements OAuth2UserInfo {
 
     private final Map<String, Object> attrs;
 

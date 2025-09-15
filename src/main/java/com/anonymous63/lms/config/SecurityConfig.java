@@ -2,6 +2,7 @@ package com.anonymous63.lms.config;
 
 import com.anonymous63.lms.security.jwt.JwtAuthFilter;
 import com.anonymous63.lms.security.oauth.CustomOAuth2UserService;
+import com.anonymous63.lms.security.oauth.CustomOidcUserService;
 import com.anonymous63.lms.security.oauth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,7 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOidcUserService customOidcUserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
@@ -38,10 +40,15 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .userInfoEndpoint(userInfo -> {
+                            userInfo.userService(customOAuth2UserService); // handles normal OAuth2
+                            userInfo.oidcUserService(customOidcUserService); // handles OIDC (Google, etc.)
+                        })
                         .successHandler(oAuth2SuccessHandler)
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

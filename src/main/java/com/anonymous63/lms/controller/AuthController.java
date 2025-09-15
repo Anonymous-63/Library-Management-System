@@ -42,8 +42,7 @@ public class AuthController {
                 .orElseThrow(() -> new RuntimeException("Default role not found"));
 
         User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
+        user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(Set.of(userRole));

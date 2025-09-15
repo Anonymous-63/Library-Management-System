@@ -2,7 +2,9 @@ package com.anonymous63.lms.security.jwt;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import java.security.*;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 
 @Configuration
 public class JwtKeyConfig {
