@@ -56,15 +56,15 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
         Role defaultRole = roleRepo.findByName("ROLE_MEMBER")
                 .orElseThrow(() -> new RuntimeException("Default role not found"));
 
-        User newUser = new User();
-        newUser.setEmail(email);
-        newUser.setName(userInfo.getName());
-        newUser.setProvider(provider);
-        newUser.setProviderId(userInfo.getId());
-        newUser.setEnabled(true);
-        newUser.setPassword(UUID.randomUUID().toString());
-        newUser.getRoles().add(defaultRole);
-
+        User newUser = User.builder()
+                .name(userInfo.getName())
+                .email(email)
+                .provider(provider)
+                .providerId(userInfo.getId())
+                .active(true)
+                .password(UUID.randomUUID().toString())
+                .roles(Set.of(defaultRole))
+                .build();
         return userRepo.save(newUser);
     }
 

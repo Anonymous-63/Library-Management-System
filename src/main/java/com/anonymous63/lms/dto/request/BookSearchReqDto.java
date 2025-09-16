@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserReqDto {
-    private String username;
-    private String name;
-    private String email;
-    private String phoneNo;
+public class BookSearchReqDto {
+    private String title;
+    private String author;
+    private String category;
 }

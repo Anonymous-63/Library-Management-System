@@ -50,12 +50,12 @@ public class DataInitializer implements CommandLineRunner {
 
         // 3. Create default admin user if not exist
         if (userRepo.findByEmail("admin@gmail.com").isEmpty()) {
-            User admin = new User();
-            admin.setName("admin");
-            admin.setEmail("admin@gmail.com");
-            admin.setPassword(passwordEncoder.encode("admin")); // change in prod
-            admin.setEnabled(true);
-            admin.setRoles(Set.of(adminRole));
+            User admin = User.builder()
+                    .name("admin")
+                    .email("admin@gmail.com")
+                    .password(passwordEncoder.encode("admin"))
+                    .roles(Set.of(adminRole))
+                    .build();
             userRepo.save(admin);
         }
 
@@ -63,11 +63,11 @@ public class DataInitializer implements CommandLineRunner {
 
     private Privilege createPrivilegeIfNotFound(String name) {
         return privilegeRepo.findByName(name)
-                .orElseGet(() -> privilegeRepo.save(new Privilege(null, name)));
+                .orElseGet(() -> privilegeRepo.save(Privilege.builder().name(name).build()));
     }
 
     private Role createRoleIfNotFound(String name, Set<Privilege> privileges) {
         return roleRepo.findByName(name)
-                .orElseGet(() -> roleRepo.save(new Role(null, name, privileges)));
+                .orElseGet(() -> roleRepo.save(Role.builder().name(name).privileges(privileges).build()));
     }
 }

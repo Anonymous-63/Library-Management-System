@@ -53,3 +53,6 @@ logging:
     org.springframework.web.client.RestTemplate: DEBUG
     org.hibernate.SQL: DEBUG
 
+app:
+  scheduler:
+    overdue-cron: "0 10 23 * * ?" # runs every day at midnight

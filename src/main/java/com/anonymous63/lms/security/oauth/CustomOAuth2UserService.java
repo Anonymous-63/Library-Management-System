@@ -16,7 +16,6 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -70,15 +69,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Role defaultRole = roleRepo.findByName("ROLE_MEMBER")
                 .orElseThrow(() -> new RuntimeException("Default role not found"));
 
-        User newUser = new User();
-        newUser.setEmail(email);
-        newUser.setName(userInfo.getName());
-        newUser.setProvider(provider);
-        newUser.setProviderId(userInfo.getId());
-        newUser.setEnabled(true);
-        newUser.setPassword(UUID.randomUUID().toString()); // placeholder
-        newUser.getRoles().add(defaultRole);
-
+        User newUser = User.builder()
+                .name(userInfo.getName())
+                .email(email)
+                .provider(provider)
+                .providerId(userInfo.getId())
+                .active(true)
+                .password(UUID.randomUUID().toString())
+                .roles(Set.of(defaultRole))
+                .build();
         return userRepo.save(newUser);
     }
 
@@ -91,6 +90,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         ResponseEntity<List<Map<String, Object>>> response =
                 restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<>() {
                 });
+        assert response.getBody() != null;
         return response.getBody().stream()
                 .filter(e -> Boolean.TRUE.equals(e.get("primary")) && Boolean.TRUE.equals(e.get("verified")))
                 .map(e -> (String) e.get("email"))

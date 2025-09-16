@@ -2,12 +2,14 @@ package com.anonymous63.lms.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "privileges")
 public class Privilege {
@@ -15,4 +17,5 @@ public class Privilege {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private boolean active = true;
 }
