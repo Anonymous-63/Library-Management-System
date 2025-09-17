@@ -6,12 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class RefreshReqDto {
+import java.util.Set;
 
-    @NotBlank(message = "Refresh token is required")
-    private String refreshToken;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RoleReqDto {
+    @NotBlank(message = "Role name is required")
+    private String name;
+
+    private Set<Long> privilegeIds; // IDs of privileges assigned to this role
 }

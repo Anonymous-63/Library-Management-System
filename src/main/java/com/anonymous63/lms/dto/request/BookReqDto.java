@@ -35,6 +35,7 @@ public class BookReqDto {
     private int totalCopies;
 
     @Min(value = 0, message = "Available copies cannot be negative")
+    @Max(value = 1000, message = "Available copies cannot exceed 1000") // optional safety limit
     private int availableCopies;
 
     @Size(max = 1000, message = "Description must not exceed 1000 characters")

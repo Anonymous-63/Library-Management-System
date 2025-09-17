@@ -16,9 +16,7 @@ import com.anonymous63.lms.service.BookTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +55,7 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         bookRepo.save(book);
 
         BookTransaction saved = bookTransactionRepo.save(transaction);
-        return mapper.toBookTransactionResDto(saved);
+        return mapper.toDto(saved);
     }
 
     @Override
@@ -82,27 +80,49 @@ public class BookTransactionServiceImpl implements BookTransactionService {
         bookRepo.save(book);
 
         BookTransaction updated = bookTransactionRepo.save(transaction);
-        return mapper.toBookTransactionResDto(updated);
+        return mapper.toDto(updated);
     }
 
     @Override
     public BookTransactionResDto getTransactionById(Long transactionId) {
         BookTransaction transaction = bookTransactionRepo.findById(transactionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found"));
-        return mapper.toBookTransactionResDto(transaction);
+        return mapper.toDto(transaction);
     }
 
     @Override
     public List<BookTransactionResDto> getTransactionsByUser(Long userId) {
         return bookTransactionRepo.findByUserId(userId).stream()
-                .map(mapper::toBookTransactionResDto)
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<BookTransactionResDto> getAllTransactions() {
         return bookTransactionRepo.findAll().stream()
-                .map(mapper::toBookTransactionResDto)
+                .map(txn -> {
+                    // Recalculate status dynamically
+                    TransactionStatus newStatus = calculateStatus(txn);
+
+                    if (newStatus != txn.getStatus()) {
+                        txn.setStatus(newStatus);
+                        bookTransactionRepo.save(txn); // persist the update
+                    }
+
+                    return mapper.toDto(txn);
+                })
                 .collect(Collectors.toList());
+    }
+
+    public TransactionStatus calculateStatus(BookTransaction txn) {
+        LocalDate now = LocalDate.now();
+
+        if (txn.getStatus() == TransactionStatus.RETURNED) {
+            return TransactionStatus.RETURNED;
+        }
+        if (txn.getDueDate().isBefore(now)) {
+            return TransactionStatus.OVERDUE;
+        }
+        return TransactionStatus.BORROWED;
     }
 }

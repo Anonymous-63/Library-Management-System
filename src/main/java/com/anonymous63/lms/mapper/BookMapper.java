@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface BookMapper {
 
     @Mapping(target = "addedByUserId", source = "addedBy.id")
-    BookResDto toBookResDto(Book book);
+    BookResDto toDto(Book book);
 
     Book toEntity(BookReqDto reqDto);
 }

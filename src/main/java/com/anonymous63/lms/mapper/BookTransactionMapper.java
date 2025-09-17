@@ -11,7 +11,7 @@ public interface BookTransactionMapper {
 
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "bookId", source = "book.id")
-    BookTransactionResDto toBookTransactionResDto(BookTransaction bookTransaction);
+    BookTransactionResDto toDto(BookTransaction bookTransaction);
 
     BookTransaction toEntity(BookTransactionReqDto reqDto);
 }

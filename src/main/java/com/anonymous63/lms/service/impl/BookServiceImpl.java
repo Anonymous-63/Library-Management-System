@@ -47,7 +47,7 @@ public class BookServiceImpl implements BookService {
         book.setCreatedAt(Instant.now());
         book.setUpdatedAt(Instant.now());
         Book savedBook = bookRepo.save(book);
-        return mapper.toBookResDto(savedBook);
+        return mapper.toDto(savedBook);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class BookServiceImpl implements BookService {
         book.setUpdatedAt(Instant.now());
 
         Book updated = bookRepo.save(book);
-        return mapper.toBookResDto(updated);
+        return mapper.toDto(updated);
     }
 
     @Override
@@ -74,11 +74,11 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepo.findById(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
 
-        if (!book.isActive()) {
+        if (!book.isEnabled()) {
             throw new IllegalStateException("Book is already archived");
         }
 
-        book.setActive(false);
+        book.setEnabled(false);
         book.setUpdatedAt(Instant.now());
         bookRepo.save(book);
     }
@@ -87,26 +87,27 @@ public class BookServiceImpl implements BookService {
     public BookResDto getBookById(Long bookId) {
         Book book = bookRepo.findByIdAndActiveTrue(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found or archived"));
-        return mapper.toBookResDto(book);
+        return mapper.toDto(book);
     }
 
     @Override
     public List<BookResDto> getAllBooks() {
-        return bookRepo.findByActiveTrue().stream()
-                .map(mapper::toBookResDto)
+        return bookRepo.findAll().stream()
+                .filter(Book::isEnabled)
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<BookResDto> searchBooks(BookSearchReqDto searchDto) {
         return bookRepo.findAll().stream()
-                .filter(Book::isActive)
+                .filter(Book::isEnabled)
                 .filter(book ->
                         (searchDto.getTitle() == null || book.getTitle().toLowerCase().contains(searchDto.getTitle().toLowerCase())) &&
                                 (searchDto.getAuthor() == null || book.getAuthor().toLowerCase().contains(searchDto.getAuthor().toLowerCase())) &&
                                 (searchDto.getCategory() == null || book.getCategory().toLowerCase().contains(searchDto.getCategory().toLowerCase()))
                 )
-                .map(mapper::toBookResDto)
+                .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -117,13 +118,13 @@ public class BookServiceImpl implements BookService {
         book.setStatus(status);
         book.setUpdatedAt(Instant.now());
         Book updated = bookRepo.save(book);
-        return mapper.toBookResDto(updated);
+        return mapper.toDto(updated);
     }
 
     @Override
     public boolean isBookAvailable(Long bookId) {
         return bookRepo.findById(bookId)
-                .filter(Book::isActive)
+                .filter(Book::isEnabled)
                 .map(book -> book.getAvailableCopies() > 0 && book.getStatus() == BookStatus.AVAILABLE)
                 .orElse(false);
     }

@@ -74,7 +74,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .email(email)
                 .provider(provider)
                 .providerId(userInfo.getId())
-                .active(true)
+                .enabled(true)
                 .password(UUID.randomUUID().toString())
                 .roles(Set.of(defaultRole))
                 .build();

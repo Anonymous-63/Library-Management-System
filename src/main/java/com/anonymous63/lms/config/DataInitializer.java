@@ -3,6 +3,7 @@ package com.anonymous63.lms.config;
 import com.anonymous63.lms.entity.Privilege;
 import com.anonymous63.lms.entity.Role;
 import com.anonymous63.lms.entity.User;
+import com.anonymous63.lms.enums.AccountStatus;
 import com.anonymous63.lms.repository.PrivilegeRepo;
 import com.anonymous63.lms.repository.RoleRepo;
 import com.anonymous63.lms.repository.UserRepo;
@@ -55,10 +56,11 @@ public class DataInitializer implements CommandLineRunner {
                     .email("admin@gmail.com")
                     .password(passwordEncoder.encode("admin"))
                     .roles(Set.of(adminRole))
+                    .enabled(true)                                     // ✅ explicitly enable
+                    .status(AccountStatus.ACTIVE)                      // ✅ admin should be ACTIVE
                     .build();
             userRepo.save(admin);
         }
-
     }
 
     private Privilege createPrivilegeIfNotFound(String name) {
@@ -68,6 +70,9 @@ public class DataInitializer implements CommandLineRunner {
 
     private Role createRoleIfNotFound(String name, Set<Privilege> privileges) {
         return roleRepo.findByName(name)
-                .orElseGet(() -> roleRepo.save(Role.builder().name(name).privileges(privileges).build()));
+                .orElseGet(() -> roleRepo.save(Role.builder()
+                        .name(name)
+                        .privileges(privileges)
+                        .build()));
     }
 }

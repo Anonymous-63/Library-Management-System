@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class BookTransactionController {
     private final BookTransactionService bookTransactionService;
 
     // ✅ Borrow a book
+    @PreAuthorize("hasAuthority('ISSUE_BOOK')")
     @PostMapping("/borrow")
     public ResponseEntity<BookTransactionResDto> borrowBook(
             @RequestBody @Valid BookTransactionReqDto reqDto) {
@@ -26,6 +28,7 @@ public class BookTransactionController {
     }
 
     // ✅ Return a book
+    @PreAuthorize("hasAuthority('RETURN_BOOK')")
     @PostMapping("/{transactionId}/return")
     public ResponseEntity<BookTransactionResDto> returnBook(@PathVariable Long transactionId) {
         BookTransactionResDto transaction = bookTransactionService.returnBook(transactionId);
@@ -33,6 +36,7 @@ public class BookTransactionController {
     }
 
     // ✅ Get transaction by ID
+    @PreAuthorize("hasAuthority('VIEW_BOOK')")
     @GetMapping("/{transactionId}")
     public ResponseEntity<BookTransactionResDto> getTransactionById(@PathVariable Long transactionId) {
         BookTransactionResDto transaction = bookTransactionService.getTransactionById(transactionId);
@@ -40,6 +44,7 @@ public class BookTransactionController {
     }
 
     // ✅ Get all transactions of a user
+    @PreAuthorize("hasAuthority('VIEW_BOOK') or #userId == principal.id")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<BookTransactionResDto>> getTransactionsByUser(@PathVariable Long userId) {
         List<BookTransactionResDto> transactions = bookTransactionService.getTransactionsByUser(userId);
@@ -47,6 +52,7 @@ public class BookTransactionController {
     }
 
     // ✅ Get all transactions
+    @PreAuthorize("hasAuthority('VIEW_BOOK')")
     @GetMapping
     public ResponseEntity<List<BookTransactionResDto>> getAllTransactions() {
         List<BookTransactionResDto> transactions = bookTransactionService.getAllTransactions();

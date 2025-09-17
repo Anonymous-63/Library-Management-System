@@ -61,7 +61,7 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
                 .email(email)
                 .provider(provider)
                 .providerId(userInfo.getId())
-                .active(true)
+                .enabled(true)
                 .password(UUID.randomUUID().toString())
                 .roles(Set.of(defaultRole))
                 .build();

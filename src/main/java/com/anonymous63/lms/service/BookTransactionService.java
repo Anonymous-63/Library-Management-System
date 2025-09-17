@@ -2,6 +2,7 @@ package com.anonymous63.lms.service;
 
 import com.anonymous63.lms.dto.request.BookTransactionReqDto;
 import com.anonymous63.lms.dto.response.BookTransactionResDto;
+import com.anonymous63.lms.enums.TransactionStatus;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface BookTransactionService {
     List<BookTransactionResDto> getTransactionsByUser(Long userId);
 
     List<BookTransactionResDto> getAllTransactions();
+
 }
