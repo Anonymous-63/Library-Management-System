@@ -14,7 +14,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update                           # update schema automatically (dev only)
-    show-sql: true                               # logs SQL queries
+    show-sql: false                               # logs SQL queries
     properties:
       hibernate:
         format_sql: true
@@ -51,7 +51,7 @@ logging:
   level:
     org.springframework.security: INFO
     org.springframework.web.client.RestTemplate: DEBUG
-    org.hibernate.SQL: DEBUG
+    #org.hibernate.SQL: DEBUG
 
 app:
   scheduler:

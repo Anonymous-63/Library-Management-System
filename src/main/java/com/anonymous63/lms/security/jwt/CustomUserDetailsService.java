@@ -24,9 +24,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Set<String> authorities = new HashSet<>();
         for (Role role : user.getRoles()) {
-            authorities.add(role.getName()); // ROLE_ADMIN, ROLE_USER
-            role.getPrivileges().forEach(p -> authorities.add(p.getName())); // USER_READ, USER_WRITE
+            authorities.add(role.getName());
+            role.getPrivileges().forEach(p -> authorities.add(p.getName()));
         }
+
+        System.out.println("User {} authorities: {}" + user.getId() + " " + authorities);
 
         return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
                 .password(user.getPassword())

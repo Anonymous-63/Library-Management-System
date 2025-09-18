@@ -1,5 +1,6 @@
 package com.anonymous63.lms.service.impl;
 
+import com.anonymous63.lms.common.exception.ResourceNotFoundException;
 import com.anonymous63.lms.dto.request.BookTransactionReqDto;
 import com.anonymous63.lms.dto.response.BookTransactionResDto;
 import com.anonymous63.lms.entity.Book;
@@ -7,7 +8,6 @@ import com.anonymous63.lms.entity.BookTransaction;
 import com.anonymous63.lms.entity.User;
 import com.anonymous63.lms.enums.BookStatus;
 import com.anonymous63.lms.enums.TransactionStatus;
-import com.anonymous63.lms.exception.ResourceNotFoundException;
 import com.anonymous63.lms.mapper.BookTransactionMapper;
 import com.anonymous63.lms.repository.BookRepo;
 import com.anonymous63.lms.repository.BookTransactionRepo;

@@ -1,12 +1,12 @@
 package com.anonymous63.lms.service.impl;
 
+import com.anonymous63.lms.common.exception.ResourceNotFoundException;
 import com.anonymous63.lms.dto.request.BookReqDto;
 import com.anonymous63.lms.dto.request.BookSearchReqDto;
 import com.anonymous63.lms.dto.response.BookResDto;
 import com.anonymous63.lms.entity.Book;
 import com.anonymous63.lms.entity.User;
 import com.anonymous63.lms.enums.BookStatus;
-import com.anonymous63.lms.exception.ResourceNotFoundException;
 import com.anonymous63.lms.mapper.BookMapper;
 import com.anonymous63.lms.repository.BookRepo;
 import com.anonymous63.lms.repository.UserRepo;
@@ -85,7 +85,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResDto getBookById(Long bookId) {
-        Book book = bookRepo.findByIdAndActiveTrue(bookId)
+        Book book = bookRepo.findByIdAndEnabledTrue(bookId)
                 .orElseThrow(() -> new ResourceNotFoundException("Book not found or archived"));
         return mapper.toDto(book);
     }
