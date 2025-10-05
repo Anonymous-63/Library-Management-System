@@ -1,5 +1,7 @@
 server:
   port: 8080
+#  servlet:
+#    context-path: /api
 
 spring:
   application:
@@ -36,8 +38,6 @@ spring:
               - openid
               - profile
               - email
-            user-name-attribute: sub   # ✅ correct for Google
-
           github:
             client-id: "Ov23liBqfP9hGZ7q32hf"
             client-secret: "044a9a390a09b1d83f4e46c6535a6910ccfcbcdf"
@@ -45,7 +45,11 @@ spring:
             scope:
               - read:user
               - user:email
-            user-name-attribute: id    # ✅ correct for GitHub
+        provider:
+          google:
+            user-name-attribute: sub
+          github:
+            user-name-attribute: id
 
 logging:
   level:

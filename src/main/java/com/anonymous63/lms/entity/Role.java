@@ -26,7 +26,6 @@ public class Role {
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "roles_privileges",
@@ -36,7 +35,7 @@ public class Role {
 
     @Column(nullable = false)
     private boolean enabled = true;
-    
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant createdAt;

@@ -2,6 +2,7 @@ package com.anonymous63.lms.security.oauth;
 
 import com.anonymous63.lms.entity.Role;
 import com.anonymous63.lms.entity.User;
+import com.anonymous63.lms.enums.AccountStatus;
 import com.anonymous63.lms.repository.RoleRepo;
 import com.anonymous63.lms.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -64,6 +65,7 @@ public class CustomOidcUserService implements OAuth2UserService<OidcUserRequest,
                 .enabled(true)
                 .password(UUID.randomUUID().toString())
                 .roles(Set.of(defaultRole))
+                .status(AccountStatus.ACTIVE)
                 .build();
         return userRepo.save(newUser);
     }

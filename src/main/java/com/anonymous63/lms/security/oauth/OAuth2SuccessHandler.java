@@ -68,9 +68,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
             new ObjectMapper().writeValue(response.getWriter(), body);
         } else {
             // Redirect for browser clients
-            String frontendRedirectUri = "http://localhost:3000/";
+            String frontendRedirectUri = "http://localhost:5173/dashboard";
             String redirectUrl = UriComponentsBuilder.fromUriString(frontendRedirectUri)
-                    .queryParam("access_token", accessToken)
+//                    .queryParam("access_token", accessToken)
                     .build().toUriString();
 
             response.sendRedirect(redirectUrl);

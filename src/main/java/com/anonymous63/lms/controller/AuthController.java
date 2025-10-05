@@ -5,26 +5,15 @@ import com.anonymous63.lms.dto.request.RefreshReqDto;
 import com.anonymous63.lms.dto.request.RegisterReqDto;
 import com.anonymous63.lms.dto.response.JwtResponse;
 import com.anonymous63.lms.dto.response.UserResDto;
-import com.anonymous63.lms.entity.Role;
-import com.anonymous63.lms.entity.User;
-import com.anonymous63.lms.repository.RoleRepo;
-import com.anonymous63.lms.repository.UserRepo;
-import com.anonymous63.lms.security.jwt.JwtUtils;
 import com.anonymous63.lms.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Set;
 
 @RestController
 @RequestMapping("/auth")

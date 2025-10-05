@@ -51,7 +51,7 @@ public class User {
     @Column(length = 500)
     private String avatarUrl;
 
-    @Column(length = 255)
+    @Column
     private String address;
 
     @Column
@@ -66,7 +66,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private AccountStatus status = AccountStatus.PENDING_VERIFICATION;
+    private AccountStatus status = AccountStatus.ACTIVE;
 
     @Column(nullable = false)
     private boolean enabled = true;

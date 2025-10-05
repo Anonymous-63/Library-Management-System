@@ -54,7 +54,7 @@ public class DataInitializer implements CommandLineRunner {
             User admin = User.builder()
                     .name("admin")
                     .email("admin@gmail.com")
-                    .password(passwordEncoder.encode("admin"))
+                    .password(passwordEncoder.encode("admin123"))
                     .roles(Set.of(adminRole))
                     .enabled(true)                                     // ✅ explicitly enable
                     .status(AccountStatus.ACTIVE)                      // ✅ admin should be ACTIVE

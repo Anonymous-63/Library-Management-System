@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     public UserResDto createUser(UserReqDto dto) {
         User user = mapper.toEntity(dto);
         user.setPassword(passwordEncoder.encode(dto.getPassword())); // always hash
-        user.setStatus(AccountStatus.PENDING_VERIFICATION);
+        user.setStatus(AccountStatus.ACTIVE);
         user.setEnabled(true);
         return mapper.toDto(userRepo.save(user));
     }
