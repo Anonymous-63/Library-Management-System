@@ -8,8 +8,14 @@ import java.util.List;
 
 public interface PrivilegeService {
     PrivilegeResDto createPrivilege(PrivilegeReqDto dto);
+
     PrivilegeResDto updatePrivilege(Long id, PrivilegeReqDto dto);
+
     void deletePrivilege(Long id);
+
     List<PrivilegeResDto> getAllPrivileges();
+
     Privilege getByName(String name); // useful for role assignment
+
+    boolean userHasPrivilege(String email, String privilegeName);
 }

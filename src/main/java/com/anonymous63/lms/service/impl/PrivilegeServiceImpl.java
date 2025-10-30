@@ -3,7 +3,9 @@ package com.anonymous63.lms.service.impl;
 import com.anonymous63.lms.dto.request.PrivilegeReqDto;
 import com.anonymous63.lms.dto.response.PrivilegeResDto;
 import com.anonymous63.lms.entity.Privilege;
+import com.anonymous63.lms.mapper.PrivilegeMapper;
 import com.anonymous63.lms.repository.PrivilegeRepo;
+import com.anonymous63.lms.repository.UserRepo;
 import com.anonymous63.lms.service.PrivilegeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +18,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class PrivilegeServiceImpl implements PrivilegeService {
+    private final PrivilegeMapper mapper;
     private final PrivilegeRepo privilegeRepo;
+    private final UserRepo userRepo;
 
     @Override
     public PrivilegeResDto createPrivilege(PrivilegeReqDto dto) {
@@ -25,7 +29,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
                 .enabled(true)
                 .build();
         privilege = privilegeRepo.save(privilege);
-        return mapToDto(privilege);
+        return mapper.toDto(privilege);
     }
 
     @Override
@@ -33,7 +37,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
         Privilege privilege = privilegeRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Privilege not found"));
         privilege.setName(dto.getName());
-        return mapToDto(privilegeRepo.save(privilege));
+        return mapper.toDto(privilegeRepo.save(privilege));
     }
 
     @Override
@@ -43,7 +47,7 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
     @Override
     public List<PrivilegeResDto> getAllPrivileges() {
-        return privilegeRepo.findAll().stream().map(this::mapToDto).collect(Collectors.toList());
+        return privilegeRepo.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -52,11 +56,12 @@ public class PrivilegeServiceImpl implements PrivilegeService {
                 .orElseThrow(() -> new RuntimeException("Privilege not found"));
     }
 
-    private PrivilegeResDto mapToDto(Privilege privilege) {
-        return PrivilegeResDto.builder()
-                .id(privilege.getId())
-                .name(privilege.getName())
-                .enabled(privilege.isEnabled())
-                .build();
+    @Override
+    public boolean userHasPrivilege(String email, String privilegeName) {
+        return userRepo.findByEmail(email)
+                .map(user -> user.getRoles().stream()
+                        .flatMap(role -> role.getPrivileges().stream())
+                        .anyMatch(privilege -> privilege.getName().equals(privilegeName)))
+                .orElse(false);
     }
 }

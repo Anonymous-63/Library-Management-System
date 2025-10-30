@@ -12,7 +12,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('MANAGE_USERS')")
+//@PreAuthorize("hasAuthority('MANAGE_USERS')")
+@PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
 @RequestMapping("/users")
 public class UserController {
 
@@ -24,7 +25,7 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(dto));
     }
 
-    // ✅ Update User
+    // ✅ Update UserÏ
     @PutMapping("/{id}")
     public ResponseEntity<UserResDto> updateUser(
             @PathVariable Long id,
