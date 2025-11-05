@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/LibraryManagementSystem   # change "mydb" to your DB name
     username: postgres                           # your DB username
-    password: coder                           # your DB password
+    password: sipl                           # your DB password
     driver-class-name: org.postgresql.Driver
 
   jpa:

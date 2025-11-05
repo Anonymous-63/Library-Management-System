@@ -12,32 +12,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/roles")
 @RequiredArgsConstructor
+@RequestMapping("/roles")
 public class RoleController {
     private final RoleService roleService;
 
-    @PreAuthorize("hasAuthority('MANAGE_ROLES')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @PostMapping
     public ResponseEntity<RoleResDto> createRole(@RequestBody RoleReqDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleService.createRole(dto));
     }
 
-    @PreAuthorize("hasAuthority('MANAGE_ROLES')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @PutMapping("/{roleId}")
     public ResponseEntity<RoleResDto> updateRole(
             @PathVariable Long roleId, @RequestBody RoleReqDto dto) {
         return ResponseEntity.ok(roleService.updateRole(roleId, dto));
     }
 
-    @PreAuthorize("hasAuthority('MANAGE_ROLES')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @DeleteMapping("/{roleId}")
     public ResponseEntity<Void> deleteRole(@PathVariable Long roleId) {
         roleService.deleteRole(roleId);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasAuthority('MANAGE_ROLES')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @GetMapping
     public ResponseEntity<List<RoleResDto>> getAllRoles() {
         return ResponseEntity.ok(roleService.getAllRoles());

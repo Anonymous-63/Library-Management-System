@@ -21,7 +21,7 @@ public class BookController {
     private final BookService bookService;
 
     // ✅ Add a new book
-    @PreAuthorize("hasAuthority('ADD_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, #book, 'CREATE')")
     @PostMapping
     public ResponseEntity<BookResDto> addBook(@RequestBody @Valid BookReqDto reqDto) {
         BookResDto createdBook = bookService.addBook(reqDto);
@@ -29,7 +29,7 @@ public class BookController {
     }
 
     // ✅ Update an existing book
-    @PreAuthorize("hasAuthority('UPDATE_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @PutMapping("/{bookId}")
     public ResponseEntity<BookResDto> updateBook(
             @PathVariable Long bookId,
@@ -39,7 +39,7 @@ public class BookController {
     }
 
     // ✅ Archive a book (soft delete)
-    @PreAuthorize("hasAuthority('DELETE_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @DeleteMapping("/{bookId}")
     public ResponseEntity<Void> archiveBook(@PathVariable Long bookId) {
         bookService.archiveBook(bookId);
@@ -47,7 +47,7 @@ public class BookController {
     }
 
     // ✅ Get book by ID
-    @PreAuthorize("hasAuthority('VIEW_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @GetMapping("/{bookId}")
     public ResponseEntity<BookResDto> getBookById(@PathVariable Long bookId) {
         BookResDto book = bookService.getBookById(bookId);
@@ -55,7 +55,7 @@ public class BookController {
     }
 
     // ✅ Get all active books
-    @PreAuthorize("hasAuthority('VIEW_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @GetMapping
     public ResponseEntity<List<BookResDto>> getAllBooks() {
         List<BookResDto> books = bookService.getAllBooks();
@@ -63,7 +63,7 @@ public class BookController {
     }
 
     // ✅ Search books with filters
-    @PreAuthorize("hasAuthority('VIEW_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @PostMapping("/search")
     public ResponseEntity<List<BookResDto>> searchBooks(@RequestBody BookSearchReqDto searchDto) {
         List<BookResDto> books = bookService.searchBooks(searchDto);
@@ -71,7 +71,7 @@ public class BookController {
     }
 
     // ✅ Update book status (AVAILABLE, BORROWED, etc.)
-    @PreAuthorize("hasAuthority('UPDATE_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @PatchMapping("/{bookId}/status")
     public ResponseEntity<BookResDto> updateBookStatus(
             @PathVariable Long bookId,
@@ -81,7 +81,7 @@ public class BookController {
     }
 
     // ✅ Check availability
-    @PreAuthorize("hasAuthority('VIEW_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @GetMapping("/{bookId}/availability")
     public ResponseEntity<Boolean> isBookAvailable(@PathVariable Long bookId) {
         boolean available = bookService.isBookAvailable(bookId);

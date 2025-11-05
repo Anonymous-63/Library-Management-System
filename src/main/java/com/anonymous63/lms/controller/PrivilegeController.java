@@ -10,30 +10,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/privileges")
 @RequiredArgsConstructor
+@RequestMapping("/privileges")
 public class PrivilegeController {
     private final PrivilegeService privilegeService;
 
-    @PreAuthorize("hasAuthority('MANAGE_ROLES')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @PostMapping
     public PrivilegeResDto create(@RequestBody PrivilegeReqDto dto) {
         return privilegeService.createPrivilege(dto);
     }
 
-    @PreAuthorize("hasAuthority('MANAGE_ROLES')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @PutMapping("/{id}")
     public PrivilegeResDto update(@PathVariable Long id, @RequestBody PrivilegeReqDto dto) {
         return privilegeService.updatePrivilege(id, dto);
     }
 
-    @PreAuthorize("hasAuthority('MANAGE_ROLES')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         privilegeService.deletePrivilege(id);
     }
 
-    @PreAuthorize("hasAuthority('MANAGE_ROLES')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @GetMapping
     public List<PrivilegeResDto> getAll() {
         return privilegeService.getAllPrivileges();

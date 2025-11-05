@@ -19,7 +19,7 @@ public class BookTransactionController {
     private final BookTransactionService bookTransactionService;
 
     // ✅ Borrow a book
-    @PreAuthorize("hasAuthority('ISSUE_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @PostMapping("/borrow")
     public ResponseEntity<BookTransactionResDto> borrowBook(
             @RequestBody @Valid BookTransactionReqDto reqDto) {
@@ -28,7 +28,7 @@ public class BookTransactionController {
     }
 
     // ✅ Return a book
-    @PreAuthorize("hasAuthority('RETURN_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @PostMapping("/{transactionId}/return")
     public ResponseEntity<BookTransactionResDto> returnBook(@PathVariable Long transactionId) {
         BookTransactionResDto transaction = bookTransactionService.returnBook(transactionId);
@@ -36,7 +36,7 @@ public class BookTransactionController {
     }
 
     // ✅ Get transaction by ID
-    @PreAuthorize("hasAuthority('VIEW_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @GetMapping("/{transactionId}")
     public ResponseEntity<BookTransactionResDto> getTransactionById(@PathVariable Long transactionId) {
         BookTransactionResDto transaction = bookTransactionService.getTransactionById(transactionId);
@@ -44,7 +44,7 @@ public class BookTransactionController {
     }
 
     // ✅ Get all transactions of a user
-    @PreAuthorize("hasAuthority('VIEW_BOOK') or #userId == principal.id")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<BookTransactionResDto>> getTransactionsByUser(@PathVariable Long userId) {
         List<BookTransactionResDto> transactions = bookTransactionService.getTransactionsByUser(userId);
@@ -52,7 +52,7 @@ public class BookTransactionController {
     }
 
     // ✅ Get all transactions
-    @PreAuthorize("hasAuthority('VIEW_BOOK')")
+    @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")
     @GetMapping
     public ResponseEntity<List<BookTransactionResDto>> getAllTransactions() {
         List<BookTransactionResDto> transactions = bookTransactionService.getAllTransactions();
