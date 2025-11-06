@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Service
 public class DocumentService {
-    @PreAuthorize("hasPermission(#doc,'READ')")
+    @PreAuthorize("hasPermission(#doc,'ADD')")
     public String read(Map<String, Object> doc) { return "doc read: " + doc.get("id"); }
 
     @PreAuthorize("hasPermission(#doc, 'UPDATE')")

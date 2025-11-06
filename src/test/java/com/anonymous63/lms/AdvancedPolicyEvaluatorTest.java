@@ -4,6 +4,8 @@ import com.anonymous63.lms.entity.AbacPolicy;
 import com.anonymous63.lms.repository.AbacPolicyRepo;
 import com.anonymous63.lms.utils.AbacAttributeProvider;
 import com.anonymous63.lms.utils.AbacPolicyEvaluator;
+import com.anonymous63.lms.utils.ConditionExpressionBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -23,13 +25,15 @@ class AdvancedPolicyEvaluatorTest {
     AbacPolicyRepo policyRepository;
     AbacAttributeProvider contextProvider = new AbacAttributeProvider();
     AbacPolicyEvaluator evaluator;
+    ConditionExpressionBuilder expressionBuilder;
+    ObjectMapper objectMapper;
 
     AbacPolicy adminRead, ownerUpdate, lockedDenyUpdate;
 
     @BeforeEach
     void setup() {
         policyRepository = mock(AbacPolicyRepo.class);
-        evaluator = new AbacPolicyEvaluator(policyRepository, contextProvider);
+        evaluator = new AbacPolicyEvaluator(policyRepository, contextProvider, expressionBuilder, objectMapper);
 
         adminRead = new AbacPolicy();
         adminRead.setResourceType("document");

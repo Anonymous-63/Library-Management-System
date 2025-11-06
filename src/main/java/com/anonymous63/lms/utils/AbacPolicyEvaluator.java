@@ -2,7 +2,7 @@ package com.anonymous63.lms.utils;
 
 import com.anonymous63.lms.entity.AbacPolicy;
 import com.anonymous63.lms.repository.AbacPolicyRepo;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -19,10 +19,14 @@ public class AbacPolicyEvaluator {
     private final AbacPolicyRepo abacPolicyRepo;
     private final AbacAttributeProvider abacAttributeProvider;
     private final ExpressionParser expressionParser = new SpelExpressionParser();
+    private final ConditionExpressionBuilder conditionExpressionBuilder;
+    private final ConditionParser conditionParser;
 
-    public AbacPolicyEvaluator(AbacPolicyRepo repository, AbacAttributeProvider contextProvider) {
+    public AbacPolicyEvaluator(AbacPolicyRepo repository, AbacAttributeProvider contextProvider, ConditionExpressionBuilder conditionExpressionBuilder,ConditionParser conditionParser) {
         this.abacPolicyRepo = repository;
         this.abacAttributeProvider = contextProvider;
+        this.conditionExpressionBuilder = conditionExpressionBuilder;
+        this.conditionParser = conditionParser;
     }
 
     public boolean evaluatePolicy(Authentication auth, String resourceType, String action, Object resource) {
@@ -33,13 +37,19 @@ public class AbacPolicyEvaluator {
 
         for (AbacPolicy policy : policies) {
             try {
+
+                List<Map<String, Object>> conditions = conditionParser.parse(policy.getConditions());
+                // 🔹 Build SpEL Expression
+                String expressionString = conditionExpressionBuilder.buildExpression(conditions);
+
+                // 🔹 Evaluate the Expression
                 StandardEvaluationContext context = new StandardEvaluationContext();
                 context.setVariable("subject", subjectAttrs);
                 context.setVariable("resource", resourceAttrs);
 
-                Expression expression = expressionParser.parseExpression(policy.getConditions());
-
+                Expression expression = expressionParser.parseExpression(expressionString);
                 Boolean result = expression.getValue(context, Boolean.class);
+
                 if (Boolean.TRUE.equals(result)) {
                     return "ALLOW".equalsIgnoreCase(policy.getEffect());
                 }

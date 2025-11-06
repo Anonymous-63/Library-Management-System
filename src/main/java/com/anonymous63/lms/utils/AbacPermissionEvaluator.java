@@ -42,8 +42,4 @@ public class AbacPermissionEvaluator implements PermissionEvaluator {
     public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
         return false;
     }
-
-    public boolean hasPermission(Authentication authentication, Object targetDomainObject, String resourceType, Object permission) {
-        return policyEvaluator.evaluatePolicy(authentication, resourceType, permission.toString(), targetDomainObject);
-    }
 }
