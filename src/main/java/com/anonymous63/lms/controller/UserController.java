@@ -2,6 +2,7 @@ package com.anonymous63.lms.controller;
 
 import com.anonymous63.lms.dto.request.UserReqDto;
 import com.anonymous63.lms.dto.response.UserResDto;
+import com.anonymous63.lms.entity.User;
 import com.anonymous63.lms.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,17 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+
+    @GetMapping("/test/{id}")
+    @PreAuthorize("hasPermission(#user, 'VIEW')")
+    public ResponseEntity<String> getEmployee(@PathVariable Long id) {
+        User user = new User();
+        user.setId(id);
+        user.setEmail("krutik@test.com");
+        user.setName("krutik");
+        return ResponseEntity.ok("Access Granted to view employee " + id);
+    }
 
     // ✅ Create User
     @PreAuthorize("@permissionEvaluator.hasPermission(authentication, null, null)")

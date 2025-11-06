@@ -28,8 +28,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             role.getPrivileges().forEach(p -> authorities.add(p.getName()));
         }
 
-        System.out.println("User {} authorities: {}" + user.getId() + " " + authorities);
-
         return org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
                 .password(user.getPassword())
                 .authorities(authorities.toArray(new String[0]))
