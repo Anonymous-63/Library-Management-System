@@ -22,7 +22,7 @@ public class BookController {
 
     // ✅ Add a new book
     @PostMapping
-    @PreAuthorize("hasPermission(#book, 'EDIT')")
+    @PreAuthorize("hasPermission(#reqDto, 'EDIT')")
     public ResponseEntity<BookResDto> addBook(@RequestBody @Valid BookReqDto reqDto) {
         BookResDto createdBook = bookService.addBook(reqDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBook);
@@ -57,7 +57,6 @@ public class BookController {
 
     // ✅ Get all active books
     @GetMapping
-    @PreAuthorize("hasPermission(#book, 'EDIT')")
     public ResponseEntity<List<BookResDto>> getAllBooks() {
         List<BookResDto> books = bookService.getAllBooks();
         return ResponseEntity.ok(books);

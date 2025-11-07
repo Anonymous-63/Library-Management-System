@@ -1,5 +1,8 @@
 package com.anonymous63.lms.entity;
 
+import com.anonymous63.lms.config.RawJsonDeserializer;
+import com.fasterxml.jackson.annotation.JsonRawValue;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,19 +20,31 @@ public class AbacPolicy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+
     private String description;
+
+    // resourceType and action used for lookup
+    @Column(nullable = false)
     private String resourceType;
+
+    @Column(nullable = false)
     private String action;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    @JsonDeserialize(using = RawJsonDeserializer.class) // 👈 handles array/object → JSON text
+    @JsonRawValue // ensures it remains valid JSON when returned
+    private String conditions; // JSON array of Condition objects
+
+    @Column(nullable = false)
     private String effect; // ALLOW or DENY
 
-    @Column(columnDefinition = "TEXT")
-    private String conditions; // store as JSON string
+    @Column
+    private Integer priority; // higher priority evaluated first (optional)
 
-    public AbacPolicy(String resourceType, String action, String effect, String conditions) {
-        this.resourceType = resourceType;
-        this.action = action;
-        this.effect = effect;
-        this.conditions = conditions;
-    }
+    // metadata, enabled flag etc
+    @Column(nullable = false)
+    private boolean enabled = true;
 }

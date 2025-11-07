@@ -31,6 +31,7 @@ public class AuthController {
     public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginReqDto request) {
         // ✅ Login now checks credentials, account status, and enabled flag
         JwtResponse tokens = authService.login(request);
+        System.out.println("#$$$$$$$$$$$$$$$$$$$$$$$$ "+tokens.getAccessToken());
         return ResponseEntity.ok(tokens);
     }
 

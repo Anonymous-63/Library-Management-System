@@ -27,19 +27,15 @@ public class AbacPermissionEvaluator implements PermissionEvaluator {
 
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
-        if (targetDomainObject instanceof java.util.Map<?, ?> m) {
-            String resourceType = (String) m.get("resourceType");
-            return policyEvaluator.evaluatePolicy(authentication, resourceType, permission.toString(), targetDomainObject);
-        }
-        return false;
+        if (!(targetDomainObject instanceof Map<?, ?> m)) return false;
+        Object rt = m.get("resourceType");
+        String resourceType = rt == null ? null : rt.toString();
+        return resourceType != null && policyEvaluator.evaluatePolicy(authentication, resourceType, permission.toString(), targetDomainObject);
     }
 
-/* <<<<<<<<<<<<<<  ✨ Windsurf Command ⭐ >>>>>>>>>>>>>>>> */
-    /**
-
-/* <<<<<<<<<<  afdf3e2d-ae42-4f49-96f2-0bf3cf373a73  >>>>>>>>>>> */
     @Override
     public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
+        // Optionally implement id-based resolving; return false by default to be explicit
         return false;
     }
 }
