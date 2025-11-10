@@ -1,6 +1,9 @@
 package com.anonymous63.lms.config;
 
-import com.anonymous63.lms.entity.*;
+import com.anonymous63.lms.entity.Book;
+import com.anonymous63.lms.entity.Privilege;
+import com.anonymous63.lms.entity.Role;
+import com.anonymous63.lms.entity.User;
 import com.anonymous63.lms.enums.AccountStatus;
 import com.anonymous63.lms.enums.BookStatus;
 import com.anonymous63.lms.repository.*;
@@ -8,15 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -32,7 +30,7 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        /*Privilege readPrivilege = Privilege.builder()
+       /* Privilege readPrivilege = Privilege.builder()
                 .name("READ_PRIVILEGE")
                 .enabled(true).build();
         Privilege writePrivilege = Privilege.builder()

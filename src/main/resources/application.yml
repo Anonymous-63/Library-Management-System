@@ -60,3 +60,5 @@ logging:
 app:
   scheduler:
     overdue-cron: "0 10 23 * * ?" # runs every day at midnight
+  jwt:
+    secret: "DfBmNudo3TjrbcOMgFe+rM3t9vHs2Ez8vlkqouDaYyOK2qOQfUjTVts9SLoYVgyIcwQNA7vpZfP0XfxeR8Sdjw=="

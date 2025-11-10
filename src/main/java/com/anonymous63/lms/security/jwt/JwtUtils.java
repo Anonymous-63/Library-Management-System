@@ -9,7 +9,7 @@ import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.security.KeyPair;
+import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class JwtUtils {
     private static final Duration ACCESS_TOKEN_VALIDITY = Duration.ofMinutes(15);
     private static final Duration REFRESH_TOKEN_VALIDITY = Duration.ofDays(7);
-    private final KeyPair keyPair;
+    private final SecretKey jwtSecretKey;
 
     // 🔹 Generate Access Token
     public String generateAccessToken(User user) {
@@ -50,14 +50,14 @@ public class JwtUtils {
                 .claim("privileges", privileges)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plus(validity)))
-                .signWith(keyPair.getPrivate(), Jwts.SIG.RS256)
+                .signWith(jwtSecretKey, Jwts.SIG.HS256) // ✅ HMAC instead of RSA
                 .compact();
     }
 
     // 🔹 Validate + Parse Claims
     public Jws<Claims> parseToken(String token) {
         return Jwts.parser()
-                .verifyWith(keyPair.getPublic())  // ✅ New API
+                .verifyWith(jwtSecretKey) // ✅ same secret for verification
                 .build()
                 .parseSignedClaims(token);
     }

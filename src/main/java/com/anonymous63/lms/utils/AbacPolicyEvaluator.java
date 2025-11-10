@@ -4,12 +4,10 @@ import com.anonymous63.lms.common.exception.PolicyEffect;
 import com.anonymous63.lms.dto.request.Condition;
 import com.anonymous63.lms.entity.AbacPolicy;
 import com.anonymous63.lms.repository.AbacPolicyRepo;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,9 +1,7 @@
 package com.anonymous63.lms.service.impl;
 
-import com.anonymous63.lms.common.exception.PolicyEffect;
 import com.anonymous63.lms.dto.request.Condition;
 import com.anonymous63.lms.entity.AbacPolicy;
-import com.anonymous63.lms.repository.AbacPolicyRepo;
 import com.anonymous63.lms.utils.AbacAttributeProvider;
 import com.anonymous63.lms.utils.ConditionExpressionBuilder;
 import com.anonymous63.lms.utils.ConditionParser;
