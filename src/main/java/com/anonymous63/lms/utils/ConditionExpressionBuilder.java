@@ -75,4 +75,48 @@ public class ConditionExpressionBuilder {
         String escaped = value.toString().replace("'", "\\'");
         return "'" + escaped + "'";
     }
+
+    private String buildContainsExpression(String leftExpr, Object rawValue, boolean negated) {
+        if (rawValue == null) return "false";
+
+        String strVal = rawValue.toString();
+        boolean multi = strVal.contains(",");
+
+        String expr;
+        if (multi) {
+            // Convert "ROLE_ADMIN, ROLE_USER" → {'ROLE_ADMIN','ROLE_USER'}
+            String list = Arrays.stream(strVal.split(","))
+                    .map(String::trim)
+                    .map(v -> "'" + v.replace("'", "\\'") + "'")
+                    .collect(Collectors.joining(","));
+            expr = String.format("(%s != null and {%s}.?[%s.contains(#this)].!isEmpty())",
+                    leftExpr, list, leftExpr);
+        } else {
+            String single = "'" + strVal.replace("'", "\\'") + "'";
+            expr = String.format("(%s != null and %s.contains(%s))", leftExpr, leftExpr, single);
+        }
+
+        return negated ? "!(" + expr + ")" : expr;
+    }
+
+    private String buildInExpression(String leftExpr, Object rawValue, boolean negated) {
+        if (rawValue == null) return "false";
+
+        String strVal = rawValue.toString();
+        boolean multi = strVal.contains(",");
+
+        String expr;
+        if (multi) {
+            String list = Arrays.stream(strVal.split(","))
+                    .map(String::trim)
+                    .map(v -> "'" + v.replace("'", "\\'") + "'")
+                    .collect(Collectors.joining(","));
+            expr = String.format("(%s != null and {%s}.contains(%s))", leftExpr, list, leftExpr);
+        } else {
+            String single = "'" + strVal.replace("'", "\\'") + "'";
+            expr = String.format("(%s != null and %s.equals(%s))", leftExpr, single, leftExpr);
+        }
+
+        return negated ? "!(" + expr + ")" : expr;
+    }
 }
